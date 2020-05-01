@@ -1,9 +1,12 @@
 import React from 'react';
+import './facerecoginition.css';
 
 
 
+const facerecognition=({imageurl,box})=>{
 
-const facerecognition=({imageurl})=>{
+
+
 
 return (
 
@@ -11,7 +14,12 @@ return (
 
 <div className='absolute mt2 mt2'  >
 
-<img src={imageurl} width='500px' height ='auto'/>
+<img id="Imageid"src={imageurl} width='500px' height ='auto'/>
+
+<div className='bounding-box' style={{top:box.top_row,right:box.right_col,bottom:box.bottom_row,left:box.left_col}}>
+
+</div>
+
 
 </div>
 </div>

@@ -36,6 +36,12 @@ const app = new Clarifai.App({
 
 
 
+
+
+
+
+
+
 class App extends Component {
 
 constructor(){
@@ -44,7 +50,8 @@ super ();
 this.state={
 
 input:'',
-imageurl:''
+imageurl:'',
+box:''
 
 }
 
@@ -59,15 +66,43 @@ this.setState({input:event.target.value});
 
 }
 
+
+
+ Calculateface=(data)=>{
+console.log('Hanji');
+const facelocation=data.outputs[0].data.regions[0].region_info.bounding_box ;
+console.log(facelocation);
+const imagedimensions=document.getElementById('Imageid');
+const width=Number(imagedimensions.width);
+const height =Number(imagedimensions.height);
+console.log(width);
+console.log(height);
+return{
+
+left_col:facelocation.left_col *width,
+top_row:facelocation.top_row*height,
+right_col:width-(facelocation.right_col*width),
+bottom_row:height-(facelocation.bottom_row*height)
+
+}}
+
+
+ displayface=(box)=>{
+console.log(box);
+this.setState({box:box})
+
+
+}
+
 onButtonsubmit=()=>{
 
 this.setState({imageurl:this.state.input});
 
 app.models.predict(Clarifai.FACE_DETECT_MODEL,this.state.input).then(
-    function(response) {
-     console.log(response);
-    },
-    function(err) {
+    response=>{
+    this.displayface(this.Calculateface(response));
+    } ).catch(
+  err=>{
      console.log(err);
     }
   
@@ -97,7 +132,7 @@ app.models.predict(Clarifai.FACE_DETECT_MODEL,this.state.input).then(
 <ImageLinkForm onInputChange={this.onInputChange} onButtonsubmit={this.onButtonsubmit} />
  
 
- <FaceRecognition imageurl={this.state.imageurl}/>
+ <FaceRecognition box ={this.state.box} imageurl={this.state.imageurl}/>
 
    
     </div>
