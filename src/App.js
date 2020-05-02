@@ -6,6 +6,8 @@ import ImageLinkForm from './components/Imagelink/imagelink';
 import FaceRecognition from './components/FaceRecognition/Facerecognition';
 import Rank from './components/Rank/Rank';
 import Clarifai from 'clarifai';
+import Signin from './components/Signin/Signin';
+import Register from './components/Register/Register';
 import './App.css';
 
 
@@ -51,7 +53,8 @@ this.state={
 
 input:'',
 imageurl:'',
-box:''
+box:'', 
+route:'Signin'
 
 }
 
@@ -94,6 +97,14 @@ this.setState({box:box})
 
 }
 
+
+onRoute =(route)=>{
+
+
+this.setState({route});
+
+}
+
 onButtonsubmit=()=>{
 
 this.setState({imageurl:this.state.input});
@@ -126,15 +137,32 @@ app.models.predict(Clarifai.FACE_DETECT_MODEL,this.state.input).then(
      <Particles className='particles'
   params={particlesoptions}
      />
-     <Navigation/>
+
+     <Navigation  onRoute={this.onRoute} />
+       {this.state.route==='home'?
+      <div>
+      
    <Logo/>
    <Rank/>
 <ImageLinkForm onInputChange={this.onInputChange} onButtonsubmit={this.onButtonsubmit} />
- 
-
  <FaceRecognition box ={this.state.box} imageurl={this.state.imageurl}/>
+</div>
+:(
+ this.state.route==='Signin'?
+ <Signin onRoute={this.onRoute}/>
+       :<Register onRoute={this.onRoute}/>
+)
 
+}
    
+
+
+
+
+
+
+
+
     </div>
   );
 }
